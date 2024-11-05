@@ -56,3 +56,19 @@ services:
     volumes:
       - ./src:/var/www/laravel
     entrypoint: ["php","/var/www/laravel/artisan"]
+  redis:
+    image: "redis:alpine"
+    container_name: Maxlify_redis_container
+    ports:
+    - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - '8081:8081'
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    restart: unless-stopped

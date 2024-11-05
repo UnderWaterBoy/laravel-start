@@ -26,7 +26,7 @@
                     <x-input type="password" name="password"/>
                 </div>
                 <div class="mb-3">
-                    <x-checkbox class="form-check ">
+                    <x-checkbox name="agreement" class="form-check ">
                         Согласен на всё
                     </x-checkbox>
                 </div>

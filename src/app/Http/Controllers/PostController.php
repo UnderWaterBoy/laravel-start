@@ -42,7 +42,7 @@ class PostController extends Controller
     }
 
 
-    public function show($post)
+    public function show( $post)
     {
         $post = (object)[
             'id' => 1,

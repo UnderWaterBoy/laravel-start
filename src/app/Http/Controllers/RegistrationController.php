@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RegistrationController extends Controller
 {
@@ -11,7 +13,8 @@ class RegistrationController extends Controller
        return view('registration.index');
     }
 
-    public function store(Request $request){
+    public function store(Request $request): RedirectResponse
+    {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:50'],
             'email' => ['required', 'string', 'max:50', 'email', 'unique:users'],
@@ -24,7 +27,7 @@ class RegistrationController extends Controller
             'email' => $validated['email'],
             'password' => $validated['password'],
         ]);
-
-        return back()->withInput();
+        Auth::login($user);
+        return redirect('/')->with('success', "Account successfully registered.");
     }
 }

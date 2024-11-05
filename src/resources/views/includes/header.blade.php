@@ -19,12 +19,25 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link {{Route::is('login')?'active': ''}}" href="{{route('login')}}">Вход</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{Route::is('registration')?'active': ''}}" href="{{route('registration')}}">Регистрация</a>
-                    </li>
+                    @if (Auth::check())
+                        <li class="nav-item">
+                        <div class="nav-link">Здравствуйте, {{ Auth::user()->name }}!</div>
+                        </li>
+                        <li class="nav-item">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <x-button class="nav-link" type="submit">Выйти</x-button>
+                            </form>
+                        </li>
+
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link {{Route::is('login')?'active': ''}}" href="{{route('login')}}">Вход</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{Route::is('registration')?'active': ''}}" href="{{route('registration')}}">Регистрация</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>

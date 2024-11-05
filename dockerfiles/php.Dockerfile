@@ -1,14 +1,22 @@
 FROM php:8.2-fpm-alpine
 
+# Установим рабочую директорию
 WORKDIR /var/www/laravel
 
-# Install PostgreSQL extensions for Alpine
+# Обновление пакетов и установка необходимых зависимостей
 RUN apk update && \
-    apk --no-cache add postgresql-dev && \
-    docker-php-ext-install pdo pdo_pgsql
+    apk add --no-cache \
+    bash \
+    libpq \
+    postgresql-dev \
+    $PHPIZE_DEPS
 
-RUN pecl install xdebug.ini-3.2.0 $$ docker-php-enable xdebug.ini
+# Устанавливаем PostgreSQL расширения
+RUN docker-php-ext-install pdo_pgsql
 
-COPY docker/php/conf.d/* $PHP_INI_DIR/conf.d/
+# Установка Redis
+RUN pecl install redis \
+    && docker-php-ext-enable redis
 
+# Устанавливаем команду по умолчанию
 CMD ["php-fpm"]

@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
-use function Laravel\Prompts\search;
+use Illuminate\View\View;
+
 
 class BlogController extends Controller
 {
@@ -35,13 +40,12 @@ class BlogController extends Controller
         return view('blog.index', compact('posts'));
     }
 
-    public function show(string $id)
+    public function show(Request $request,string $id): View
     {
-        $post = (object)[
-            'id' => 1,
-            'title' => 'Название поста',
-            'body' => 'Тело поста с текстом ',
-        ];
+        $post = Cache::remember("posts.{$id}", now()->addDay(), function () use ($id) {
+            return Post::query()->findOrFail($id);
+        });
+
         return view('blog.show', compact('post'));
     }
 
