@@ -15,8 +15,13 @@ services:
       dockerfile: php.Dockerfile
     volumes:
       - ./src:/var/www/laravel
+    restart: unless-stopped
+    environment:
+      XDEBUG_MODE: debug,develop
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   postgres:
-    image: postgres:latest
+    image: postgres:16.2-alpine
     container_name: postgres_container
     environment:
       POSTGRES_USER: postgres_user
@@ -60,7 +65,7 @@ services:
     image: "redis:alpine"
     container_name: Maxlify_redis_container
     ports:
-    - "6379:6379"
+      - "6379:6379"
     volumes:
       - ./redis-data:/data
     command: redis-server --appendonly yes
@@ -72,3 +77,13 @@ services:
     environment:
       - REDIS_HOSTS=local:redis:6379
     restart: unless-stopped
+  node:
+    image: node:latest
+    container_name: node
+    restart: always
+    working_dir: /var/www/laravel
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./src:/var/www/laravel
+    command: sh -c "npm install && npm run dev"

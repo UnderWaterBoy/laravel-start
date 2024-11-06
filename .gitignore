@@ -4,7 +4,7 @@ node_modules/
 # Логи
 logs/
 *.log
-
+/.idea
 # Docker
 *.tar
 *.img
@@ -14,3 +14,4 @@ docker-compose.override.yml
 /node_modules
 /storage/*.key
 .env
+/pgdata

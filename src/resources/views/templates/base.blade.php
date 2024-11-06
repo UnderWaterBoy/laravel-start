@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <title>@yield('page.title', config('app.name'))</title>
     @stack('css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .required:after{
             content: "*";
@@ -23,6 +24,7 @@
     </style>
 </head>
 <body>
+<div id="app"></div>
 @include('includes.alert')
 <div class="d-flex flex-column justify-between min-vh-100 ">
     @include('includes.header')
@@ -31,7 +33,7 @@
     </main>
     @include('includes.footer')
 </div>
-
+{{--<script type="module" src="{{ asset('resources/js/app.js') }}"></script>--}}
 <script src="/js/bootstrap.min.js"></script>
 @stack('js')
 </body>
